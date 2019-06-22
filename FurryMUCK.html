@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="Arctic Kona">
+		<meta name="generator" content="">
+		<title>FurryMUCK</title>
+		<link rel="canonical" href="">
+		<!-- Bootstrap -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"> </script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"> </script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"> </script>
+
+		<script>
+			websockethost = 'ws://192.168.0.12:2001/'
+
+			function setheme ( ) {
+				// Background color
+				if ( document.getElementById('theme-light').checked ) {
+					document.getElementById('body').className = 'bg-light';
+					document.getElementById('muckcont').className = 'text-dark';
+					document.getElementById('body').style.backgroundColor = '';
+					document.getElementById('muckcont').style.color = '';
+				} else if ( document.getElementById('theme-dark').checked ) {
+					document.getElementById('body').className = 'bg-dark';
+					document.getElementById('muckcont').className = 'text-light';
+					document.getElementById('body').style.backgroundColor = '';
+					document.getElementById('muckcont').style.color = '';
+				} else if ( document.getElementById('theme-custom').checked ) {
+					document.getElementById('body').className = '';
+					document.getElementById('body').style.backgroundColor = document.getElementById('theme-color').value;
+				}
+
+				// Font color
+				if ( document.getElementById('font-default').checked ) {
+					
+				} else if ( document.getElementById('font-custom').checked ) {
+					document.getElementById('muckcont').className = '';
+					document.getElementById('muckcont').style.color = document.getElementById('font-color').value;
+				}
+
+				return 0;
+			}
+
+
+			// Websocket connection to server
+			if ( window.WebSocket ) { 
+				const socket = new WebSocket( websockethost );
+				socket.onmessage = function ( msg ) {
+					// Transforms links
+					
+
+					// Add data, then scroll
+					document.getElementById('muckcont').textContent += msg.data ;
+					document.getElementById('userentr').scrollIntoView();
+					return 0;
+				}
+				socket.onerror = function ( ) {
+					document.getElementById('muckcont').innerHTML += 'Connection error.\r\n';
+					return 0;
+				}
+				socket.onclose = function ( ) {
+					document.getElementById('muckcont').innerHTML += 'Connection to server terminated. Refresh page to connect again.\r\n';
+					return 0;
+				}
+				socket.onconnect = function ( ) {
+					document.getElementById('muckcont').innerHTML += 'Connection to established.\r\n';
+					return 0;
+				}
+				function send ( ele ) {
+					// Get value
+					var value = ele.value;
+					ele.value = '';
+
+					// Set header
+					if ( value.split(' ')[0] == 'connect' ) {
+						document.getElementById('username').innerHTML = value.split(' ')[1];
+					}
+
+					// Send content
+					value += '\r\n';
+					document.getElementById('muckcont').textContent += value ;
+					socket.send ( value );
+					return 0;
+				}
+			} else {
+				function send ( ele ) {
+					alert ( 'Your browser needs WebSocket support.' );
+				}
+				alert ( 'Your browser needs WebSocket support.' );
+			}
+		</script>
+	</head>
+	<body id="body" class="bg-dark" ondlclick="javascript:alert('tet');">
+		<noscript><H1>!JAVASCRIPT ERROR!</H1></noscript>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+			<span class="navbar-brand"><span id="username"></span>@furry.org:8888</span>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"> </span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="#" data-toggle="modal" data-target="#popover">Settings</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="http://furrymuck.com/">About FurryMUCK</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="https://arcticjieer.fam.cx/">About Me</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<main role="main" class="container row mx-auto p-0 py-3 ml-0">
+			<div id="popover" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="popover-label">Settings</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label>Background color</label>
+								<div class="form-check">
+									<input id="theme-light" class="form-check-input" type="radio" name="theme" value="light" aria-label="light radio button"/>
+									<label class="form-check-label" for="theme-light">Light</label>
+								</div>
+								<div class="form-check">
+									<input id="theme-dark" class="form-check-input" type="radio" name="theme" value="dark" aria-label="dark radio button" checked />
+									<label class="form-check-label" for="theme-dark">Dark</label>
+								</div>
+								<div class="form-check">
+									<input id="theme-custom" class="form-check-input" type="radio" name="theme" value="custom" aria-label="custom radio button" />
+									<label class="form-check-label" for="theme-custom">Custom: </label>
+									<input id="theme-color" type="entry" class="form-control" name="theme-color" value="black" placeholder="white, blue, #8d5d72, rbga(34,128,57,1), etc." aria-label="custom color" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Font color</label>
+								<div class="form-check">
+									<input id="font-default" class="form-check-input" type="radio" name="font" value="default" aria-label="default radio button" checked />
+									<label class="form-check-label" for="font-light">Default</label>
+								</div>
+								<div class="form-check">
+									<input id="font-custom" class="form-check-input" type="radio" name="font" value="custom" aria-label="custom radio button" />
+									<label class="form-check-label" for="theme-custom">Custom: </label>
+									<input id="font-color" type="entry" class="form-control" name="font-color" value="#00FF00" placeholder="white, blue, #8d5d72, rbga(34,128,57,1), etc." aria-label="custom color" />
+								</div>
+							</div><!--
+							<div class="form-group">
+								<label>Font size</label>
+								
+							</div>-->
+							<div class="form-group">
+								<label>Typeface</label>
+								<select id="typeface" class="form-control" name="typeface">
+									<option>
+										Browser default
+									</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" onclick="javascript:setheme();" class="btn btn-primary" data-toggle="modal" data-target="#popover">Okie~</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12">
+
+				<pre id="muckcont" class="text-light" style="white-space: pre-wrap;">
+Trying to connect to server ...
+</pre>
+				<form class="w-100" action="javascript:void(0);" onsubmit="javascript:send(document.getElementById('userentr'));">
+					<input id="userentr" type="entry" name="entry" class="w-100" value="" autocomplete="off" aria-label="enter FurryMUCK command"/>
+				</form>
+				<div id="disclaimer" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+					<strong>I cannot guarantee availability, confidentiality, and integrity of my infrastructure and software. Therefore, you assume all risks and I disclaim all consequences unless required by law. If you cannot accept, do not use my services or software.</strong>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="version" class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+					This service should be considered of <strong>alpha</strong> quality. Do not expect it to do what's expected.
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>
+
