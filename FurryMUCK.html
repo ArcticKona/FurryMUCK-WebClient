@@ -15,10 +15,13 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"> </script>
 
 		<script>
-			if ( typeof ( Storage ) !== "undefined" ) {
-				alert ( 'Arctic Kona suggets: please update your browser.' );
+			if ( typeof ( Storage ) == "undefined" || ! window.WebSocket ) {
+				alert ( 'Arctic Kona suggets: ERROR mail me please' );
 			}
-			localStorage.furrymuck += ;
+			if ( localStorage.logit == true ) {
+				var d = new Date();
+				localStorage.furrylog += '*** FURRYMUCK WEBCLIENT LOGGER ***\r\n--- ' + String( d.getDate( ) ).padStart( 2 , '0' ) + '/' + String( today.getMonth( ) + 1 ).padStart( 2 , '0') + '/' + today.getFullYear() + ' | ' + d.getTime() + ' ---\r\n'
+			}
 
 			// Can't fix reverse proxy, dirty patch with port number
 			websockethost = 'wss://api.kona.cf:2001/'
@@ -26,79 +29,104 @@
 			function setheme ( ) {
 				// Background color
 				if ( document.getElementById('theme-light').checked ) {
+					localStorage.theme = 'theme-light';
+
 					document.getElementById('body').className = 'bg-light';
 					document.getElementById('muckcont').className = 'text-dark';
 					document.getElementById('body').style.backgroundColor = '';
 					document.getElementById('muckcont').style.color = '';
 				} else if ( document.getElementById('theme-dark').checked ) {
+					localStorage.theme = 'theme-dark';
+					
 					document.getElementById('body').className = 'bg-dark';
 					document.getElementById('muckcont').className = 'text-light';
 					document.getElementById('body').style.backgroundColor = '';
 					document.getElementById('muckcont').style.color = '';
 				} else if ( document.getElementById('theme-custom').checked ) {
+					localStorage.theme = 'theme-custom';
+					
 					document.getElementById('body').className = '';
 					document.getElementById('body').style.backgroundColor = document.getElementById('theme-color').value;
+				}
+				localStorage.themetext = document.getElementById('theme-color').value;
+
+				// Logging
+				if ( document.getElementById('log').checked == true ) {
+					logit = true;
+					localStorage.logit = true;
+				} else {
+					logit = false;
+					localStorage.logit = false;
 				}
 
 				// Font color
 				if ( document.getElementById('font-default').checked ) {
+					localStorage.theme = 'font-default';
 					
 				} else if ( document.getElementById('font-custom').checked ) {
+					localStorage.theme = 'font-custom';
+					
 					document.getElementById('muckcont').className = '';
 					document.getElementById('muckcont').style.color = document.getElementById('font-color').value;
 				}
+				localStorage.fonttext = document.getElementById('font-color').value;
 
 				return 0;
 			}
 
 
 			// Websocket connection to server
-			if ( window.WebSocket ) { 
-				const socket = new WebSocket( websockethost );
-				socket.onmessage = function ( msg ) {
-					// Transforms links
-					
-					// Add data
-					document.getElementById('muckcont').textContent += msg.data ;
-					return 0;
+			const socket = new WebSocket( websockethost );
+			socket.onmessage = function ( msg ) {
+				// Transforms links
+				
+				// Add data
+				document.getElementById('muckcont').textContent += msg.data;
+				// Log data
+				if ( localStorage.logit == 'true' ) {
+					localStorage.furrylog += msg.data;
 				}
-				socket.onerror = function ( ) {
-					document.getElementById('muckcont').innerHTML += 'Connection error.\r\n';
-					return 0;
-				}
-				socket.onclose = function ( ) {
-					document.getElementById('muckcont').innerHTML += 'Connection to server terminated. Refresh page to connect again.\r\n';
-					return 0;
-				}
-				socket.onconnect = function ( ) {
-					document.getElementById('muckcont').innerHTML += 'Connection to established.\r\n';
-					return 0;
-				}
-				function send ( ele ) {
-					// Get value
-					var value = ele.value;
-					ele.value = '';
 
-					// Set header
-					if ( value.split(' ')[0] == 'connect' ) {
-						document.getElementById('username').innerHTML = value.split(' ')[1];
-					}
-
-					// Send content
-					value += '\r\n';
-					document.getElementById('muckcont').textContent += value ;
-					socket.send ( value );
-
-					// Try to log it
-					if ( 
-					return 0;
-				}
-			} else {
-				function send ( ele ) {
-					alert ( 'Your browser needs WebSocket support.' );
-				}
-				alert ( 'Your browser needs WebSocket support.' );
+				return 0;
 			}
+			socket.onerror = function ( ) {
+				document.getElementById('muckcont').innerHTML += 'Connection error.\r\n';
+				return 0;
+			}
+			socket.onclose = function ( ) {
+				document.getElementById('muckcont').innerHTML += 'Connection to server terminated. Refresh page to connect again.\r\n';
+				return 0;
+			}
+			socket.onconnect = function ( ) {
+				document.getElementById('muckcont').innerHTML += 'Connection to established.\r\n';
+				return 0;
+			}
+			function send ( ele ) {
+				// Get value
+				var value = ele.value;
+				ele.value = '';
+
+				// Set header
+				if ( value.split(' ')[0] == 'connect' ) {
+					document.getElementById('username').innerHTML = value.split(' ')[1];
+				}
+
+				// Send content
+				value += '\r\n';
+				document.getElementById('muckcont').textContent += value ;
+				socket.send ( value );
+
+				// Try to log it (but not passwords)
+				if ( localStorage.logit == 'true' ) {
+					if ( value.split(' ')[0] == 'connect' && value.split(' ')[2] != undefined ) {
+						value.split(' ')[2] = '<redacted>';
+					}
+					localStorage.furrylog += value;
+				}
+
+				return 0;
+			}
+
 		</script>
 	</head>
 	<body id="body" class="bg-dark" ondlclick="javascript:alert('tet');">
@@ -164,6 +192,14 @@
 								
 							</div>-->
 							<div class="form-group">
+								<label>Logging</label>
+								<div class="custom-control custom-switch">
+									<input type="checkbox" class="custom-control-input" id="log">
+									<label class="custom-control-label" for="log">Log sessions</label>
+								</div>
+								
+							</div>
+							<div class="form-group">
 								<label>Typeface</label>
 								<select id="typeface" class="form-control" name="typeface">
 									<option>
@@ -201,6 +237,20 @@ Trying to connect to server ...
 				</div>
 			</div>
 		</main>
+
+		<script>
+			// Set on startup (try, if there's no settings)
+			try {
+				document.getElementById( localStorage.theme ).checked = true;
+				document.getElementById('themecolor').value = localStorage.themetext;
+				document.getElementById( localStorage.font ).checked = true;
+				document.getElementById('fontcolor').value = localStorage.fonttext;
+				document.getElementById('log').checked = localStorage.logit;
+				setheme ( );
+			} catch {
+
+			}
+		</script>
 	</body>
 </html>
 
