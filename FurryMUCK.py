@@ -2,15 +2,17 @@
 import ssl
 import asyncio
 import websockets
+import daemon
 print ( 'FurryMUCK TCP-WebSocket Relay Server. 2019 Arctic Kona. No rights reserved. http://arcticjieer.fam.cx/ mailto:arcticjieer@gmail.com' )
 
-host = 'furrymuck.com'
-port = 8899
-localhost = '0.0.0.0'
-localport = '2001'
-sslcontext = ssl.create_default_context ( cafile = 'FurryMUCK.pem' )
-serverssl = ssl.SSLContext ( )
-serverssl.load_cert_chain ( certfile = 'ssl_cert.pem' , keyfile = 'ssl_key.pem' )
+muck_host = 'furrymuck.com'
+muck_port = 8899
+muck_ssl = ssl.create_default_context ( cafile = 'FurryMUCK.pem' )
+server_host = '0.0.0.0'
+server_port = '2001'
+server_ssl = ssl.SSLContext ( )
+server_ssl.load_cert_chain ( certfile = 'ssl_cert.pem' , keyfile = 'ssl_key.pem' )
+server_daemon = True
 
 async def tomuck ( websocket , socketwrite ):
 	while True:
@@ -31,14 +33,22 @@ async def frommuck ( websocket , socketread ):
 	websocket.send ( 'connection close' )
 
 async def muck ( websocket , path ):
-	socketread , socketwrite = await asyncio.open_connection ( host , port , ssl = sslcontext )
+	socketread , socketwrite = await asyncio.open_connection ( muck_host , muck_port , ssl = muck_ssl )
 	# Prepare tasks
 	tomuck_task = asyncio.ensure_future( tomuck ( websocket , socketwrite ) )
 	frommuck_task = asyncio.ensure_future( frommuck ( websocket , socketread ) )
 	await tomuck_task
 	await frommuck_task
 
-asyncio.get_event_loop( ).run_until_complete( websockets.serve ( muck , localhost , localport ) )
-asyncio.get_event_loop( ).run_forever( )
+def start_server ( ):
+	asyncio.get_event_loop( ).run_until_complete( websockets.serve ( muck , server_host , server_port , ssl = server_ssl ) )
+	asyncio.get_event_loop( ).run_forever( )
+
+# launch daemon
+if server_daemon:
+	with daemon.DaemonContext ( ):
+		start_server ( )
+else:
+	start_server ( )
 
 
