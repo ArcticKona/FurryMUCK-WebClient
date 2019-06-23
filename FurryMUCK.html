@@ -15,6 +15,11 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"> </script>
 
 		<script>
+			if ( typeof ( Storage ) !== "undefined" ) {
+				alert ( 'Arctic Kona suggets: please update your browser.' );
+			}
+			localStorage.furrymuck += ;
+
 			// Can't fix reverse proxy, dirty patch with port number
 			websockethost = 'wss://api.kona.cf:2001/'
 
@@ -53,10 +58,8 @@
 				socket.onmessage = function ( msg ) {
 					// Transforms links
 					
-
-					// Add data, then scroll
+					// Add data
 					document.getElementById('muckcont').textContent += msg.data ;
-					document.getElementById('userentr').scrollIntoView();
 					return 0;
 				}
 				socket.onerror = function ( ) {
@@ -85,6 +88,9 @@
 					value += '\r\n';
 					document.getElementById('muckcont').textContent += value ;
 					socket.send ( value );
+
+					// Try to log it
+					if ( 
 					return 0;
 				}
 			} else {

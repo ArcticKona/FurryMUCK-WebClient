@@ -9,6 +9,8 @@ port = 8899
 localhost = '0.0.0.0'
 localport = '2001'
 sslcontext = ssl.create_default_context ( cafile = 'FurryMUCK.pem' )
+serverssl = ssl.SSLContext ( )
+serverssl.load_cert_chain ( certfile = 'ssl_cert.pem' , keyfile = 'ssl_key.pem' )
 
 async def tomuck ( websocket , socketwrite ):
 	while True:
@@ -19,7 +21,7 @@ async def tomuck ( websocket , socketwrite ):
 		socketwrite.write ( msg.encode( 'UTF-8' ) )
 	# close connection when websocket dies
 	socketwrite.close( )
-	await wait_close( )
+	await socketwrite.wait_close( )
 
 async def frommuck ( websocket , socketread ):
 	while ( not socketread.at_eof ( ) ):
