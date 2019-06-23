@@ -204,7 +204,7 @@
 									<label class="custom-control-label" for="log">Log sessions</label>
 								</div>
 								<button type="button" onclick="javascript:download( localStorage.furrylog , 'furrylog.txt' , 'text/plain' );" class="btn btn-primary" >Download logs</button>
-								<button type="button" onclick="javascript:if ( confirm('Are you sure?') ) { localStorage.logit = 'false' ; document.getElementById('log').checked = false ; localStorage.furrylog = '--- START ALL LOGS ---\r\n' ; };" class="btn btn-primary" >Clear logs now</button>
+								<button type="button" onclick="javascript:if ( confirm('Are you sure?') ) { localStorage.logit = 'false' ; document.getElementById('log').checked = false ; localStorage.furrylog = '--- START ALL LOGS ---\r\n' ; };" class="btn btn-secondary" >Clear logs now</button>
 							</div>
 							<div class="form-group">
 								<label>Typeface</label>
@@ -216,6 +216,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
+							<button type="button" onclick="" class="btn btn-secondary" data-toggle="modal" data-target="#popover">Cancel</button>
 							<button type="button" onclick="javascript:setheme();" class="btn btn-primary" data-toggle="modal" data-target="#popover">Okie~</button>
 						</div>
 					</div>
