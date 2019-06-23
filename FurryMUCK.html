@@ -124,7 +124,7 @@
 
 				// Try to log it (but not passwords)
 				if ( localStorage.logit == 'true' ) {
-					if ( value.split(' ')[0] == 'connect' && value.split(' ')[2] != undefined ) {
+					if ( value.split(' ')[0] == 'connect' && value.split(' ')[2] != '' ) {
 						value.split(' ')[2] = '<redacted>';
 					}
 					localStorage.furrylog += value;
