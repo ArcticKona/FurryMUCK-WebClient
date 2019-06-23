@@ -22,6 +22,9 @@
 				alert ( 'Arctic Kona suggets: ERROR mail me please' );
 			}
 			if ( localStorage.logit == 'true' ) {	// TODO: when HTML5 log full
+				if ( localStorage.furrylog == "undefined" ) {
+					localStorage.furrylog = '';
+				}
 				var d = new Date();
 				localStorage.furrylog += '*** FURRYMUCK WEBCLIENT LOGGER ***\r\n--- ' + String( d.getDate( ) ).padStart( 2 , '0' ) + '/' + String( d.getMonth( ) + 1 ).padStart( 2 , '0') + '/' + d.getFullYear() + ' | ' + d.getTime() + ' ---\r\n';
 			}
