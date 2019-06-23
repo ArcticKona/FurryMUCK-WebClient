@@ -21,10 +21,10 @@
 			if ( typeof ( Storage ) == "undefined" || ! window.WebSocket ) {
 				alert ( 'Arctic Kona suggets: ERROR mail me please' );
 			}
+			if ( localStorage.furrylog == "undefined" ) {
+				localStorage.furrylog = '--- START ALL LOGS ---\r\n';
+			}
 			if ( localStorage.logit == 'true' ) {	// TODO: when HTML5 log full
-				if ( localStorage.furrylog == "undefined" ) {
-					localStorage.furrylog = '';
-				}
 				var d = new Date();
 				localStorage.furrylog += '*** FURRYMUCK WEBCLIENT LOGGER ***\r\n--- ' + String( d.getDate( ) ).padStart( 2 , '0' ) + '/' + String( d.getMonth( ) + 1 ).padStart( 2 , '0') + '/' + d.getFullYear() + ' | ' + d.getTime() + ' ---\r\n';
 			}
@@ -96,15 +96,15 @@
 				return 0;
 			}
 			socket.onerror = function ( ) {
-				document.getElementById('muckcont').innerHTML += 'Connection error.\r\n';
+				document.getElementById('muckcont').textContent += 'Connection error.\r\n';
 				return 0;
 			}
 			socket.onclose = function ( ) {
-				document.getElementById('muckcont').innerHTML += 'Connection to server terminated. Refresh page to connect again.\r\n';
+				document.getElementById('muckcont').textContent += 'Connection to server terminated. Refresh page to connect again.\r\n';
 				return 0;
 			}
 			socket.onconnect = function ( ) {
-				document.getElementById('muckcont').innerHTML += 'Connection to established.\r\n';
+				document.getElementById('muckcont').textContent += 'Connection to established.\r\n';
 				return 0;
 			}
 			function send ( ele ) {
@@ -113,8 +113,8 @@
 				ele.value = '';
 
 				// Set header
-				if ( value.split(' ')[0] == 'connect' ) {
-					document.getElementById('username').innerHTML = value.split(' ')[1];
+				if ( value.split(' ')[0] == 'connect' && value.split(' ')[1] != "undefined" ) {
+					document.getElementById('username').textContent = value.split(' ')[1];
 				}
 
 				// Send content
@@ -124,8 +124,8 @@
 
 				// Try to log it (but not passwords)
 				if ( localStorage.logit == 'true' ) {
-					if ( value.split(' ')[0] == 'connect' && value.split(' ')[2] != '' ) {
-						value.split(' ')[2] = '<redacted>';
+					if ( value.split(' ')[0] == 'connect' && value.split(' ')[1] != "undefined" ) {
+						value = 'connect ' + value.split(' ')[1] + ' <redacted>\r\n' ;
 					}
 					localStorage.furrylog += value;
 				}
@@ -204,7 +204,7 @@
 									<label class="custom-control-label" for="log">Log sessions</label>
 								</div>
 								<button type="button" onclick="javascript:download( localStorage.furrylog , 'furrylog.txt' , 'text/plain' );" class="btn btn-primary" >Download logs</button>
-								<button type="button" onclick="javascript:if ( confirm('Are you sure?') ) { localStorage.logit = 'false' ; document.getElementById('log').checked = false ; localStorage.furrylog = '' ; };" class="btn btn-primary" >Clear logs now</button>
+								<button type="button" onclick="javascript:if ( confirm('Are you sure?') ) { localStorage.logit = 'false' ; document.getElementById('log').checked = false ; localStorage.furrylog = '--- START ALL LOGS ---\r\n' ; };" class="btn btn-primary" >Clear logs now</button>
 							</div>
 							<div class="form-group">
 								<label>Typeface</label>
