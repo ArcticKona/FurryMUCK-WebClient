@@ -14,13 +14,16 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"> </script>
 
+		<!-- Download helper -->
+		<script src="http://danml.com/js/download.js"></script>
+
 		<script>
 			if ( typeof ( Storage ) == "undefined" || ! window.WebSocket ) {
 				alert ( 'Arctic Kona suggets: ERROR mail me please' );
 			}
-			if ( localStorage.logit == true ) {
+			if ( localStorage.logit == 'true' ) {	// TODO: when HTML5 log full
 				var d = new Date();
-				localStorage.furrylog += '*** FURRYMUCK WEBCLIENT LOGGER ***\r\n--- ' + String( d.getDate( ) ).padStart( 2 , '0' ) + '/' + String( today.getMonth( ) + 1 ).padStart( 2 , '0') + '/' + today.getFullYear() + ' | ' + d.getTime() + ' ---\r\n'
+				localStorage.furrylog += '*** FURRYMUCK WEBCLIENT LOGGER ***\r\n--- ' + String( d.getDate( ) ).padStart( 2 , '0' ) + '/' + String( d.getMonth( ) + 1 ).padStart( 2 , '0') + '/' + d.getFullYear() + ' | ' + d.getTime() + ' ---\r\n';
 			}
 
 			// Can't fix reverse proxy, dirty patch with port number
@@ -53,18 +56,18 @@
 				// Logging
 				if ( document.getElementById('log').checked == true ) {
 					logit = true;
-					localStorage.logit = true;
+					localStorage.logit = 'true';
 				} else {
 					logit = false;
-					localStorage.logit = false;
+					localStorage.logit = 'false';
 				}
 
 				// Font color
 				if ( document.getElementById('font-default').checked ) {
-					localStorage.theme = 'font-default';
+					localStorage.font = 'font-default';
 					
 				} else if ( document.getElementById('font-custom').checked ) {
-					localStorage.theme = 'font-custom';
+					localStorage.font = 'font-custom';
 					
 					document.getElementById('muckcont').className = '';
 					document.getElementById('muckcont').style.color = document.getElementById('font-color').value;
@@ -193,11 +196,12 @@
 							</div>-->
 							<div class="form-group">
 								<label>Logging</label>
-								<div class="custom-control custom-switch">
+								<div class="custom-control custom-switch mb-1">
 									<input type="checkbox" class="custom-control-input" id="log">
 									<label class="custom-control-label" for="log">Log sessions</label>
 								</div>
-								
+								<button type="button" onclick="javascript:download( localStorage.furrylog , 'furrylog.txt' , 'text/plain' );" class="btn btn-primary" >Download logs</button>
+								<button type="button" onclick="javascript:if ( confirm('Are you sure?') ) { localStorage.logit = 'false' ; document.getElementById('log').checked = false ; localStorage.furrylog = '' ; };" class="btn btn-primary" >Clear logs now</button>
 							</div>
 							<div class="form-group">
 								<label>Typeface</label>
@@ -242,10 +246,10 @@ Trying to connect to server ...
 			// Set on startup (try, if there's no settings)
 			try {
 				document.getElementById( localStorage.theme ).checked = true;
-				document.getElementById('themecolor').value = localStorage.themetext;
+				document.getElementById('theme-color').value = localStorage.themetext;
 				document.getElementById( localStorage.font ).checked = true;
-				document.getElementById('fontcolor').value = localStorage.fonttext;
-				document.getElementById('log').checked = localStorage.logit;
+				document.getElementById('font-color').value = localStorage.fonttext;
+				if ( localStorage.logit == 'true' ) { document.getElementById('log').checked = true; } else { document.getElementById('log').checked = false; }
 				setheme ( );
 			} catch {
 
