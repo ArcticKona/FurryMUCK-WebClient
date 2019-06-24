@@ -9,3 +9,6 @@ FurryMUCK.py:
 
 FurryMUCK.pem:
     FurryMUCK public certificate
+
+`pip3 install websockets python-daemon`
+
