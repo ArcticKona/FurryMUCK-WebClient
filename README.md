@@ -1,7 +1,7 @@
 # FurryMUCK-WebClient
 Basic web client for FurryMUCK (or any MUCK)
 
-[service](https://github.com/Tigerjieer/FurryMUCK-WebClient)
+[Live service](https://furrymuck.kona.cf/)
 
 DM me for issues or help.
 
