@@ -10,8 +10,8 @@ muck_port = 8899
 muck_ssl = ssl.create_default_context ( cafile = 'FurryMUCK.pem' )
 server_host = '0.0.0.0'
 server_port = '2001'
-#server_ssl = ssl.SSLContext ( )
-#server_ssl.load_cert_chain ( certfile = 'ssl_cert.pem' , keyfile = 'ssl_key.pem' )
+server_ssl = ssl.SSLContext ( )
+server_ssl.load_cert_chain ( certfile = 'ssl_cert.pem' , keyfile = 'ssl_key.pem' )
 server_daemon = True
 
 def start_server ( ):
