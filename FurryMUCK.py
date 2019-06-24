@@ -41,7 +41,7 @@ def start_server ( ):
 		await tomuck_task
 		await frommuck_task
 		
-	asyncio.get_event_loop( ).run_until_complete( websockets.serve ( muck , server_host , server_port ) )
+	asyncio.get_event_loop( ).run_until_complete( websockets.serve ( muck , server_host , server_port ) , ssl = server_ssl )
 	asyncio.get_event_loop( ).run_forever( )
 
 # launch daemon
