@@ -1,6 +1,8 @@
 # FurryMUCK-WebClient
 Basic web client for FurryMUCK (or any MUCK)
 
+DM me for issues or help.
+
 FurryMUCK.html:
     Simple web interface (open, configure websocket host)
 
