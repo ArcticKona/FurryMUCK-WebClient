@@ -23,6 +23,7 @@
 				window.location = 'https://' + window.location.hostname + window.location.pathname;
 			}
 
+			// Prepare
 			if ( typeof ( Storage ) == "undefined" || ! window.WebSocket ) {
 				alert ( 'Arctic Kona suggets: ERROR mail me please' );
 			}
@@ -34,8 +35,8 @@
 				localStorage.furrylog += '*** FURRYMUCK WEBCLIENT LOGGER ***\r\n--- ' + String( d.getDate( ) ).padStart( 2 , '0' ) + '/' + String( d.getMonth( ) + 1 ).padStart( 2 , '0') + '/' + d.getFullYear() + ' | ' + d.getTime() + ' ---\r\n';
 			}
 
-			// Can't fix reverse proxy, dirty patch with port number
-			websockethost = 'wss://api.kona.cf:2001/'
+			// Websocket
+			websockethost = 'wss://api.kona.cf/furrymuck'
 
 			function setheme ( ) {
 				// Background color
@@ -85,32 +86,32 @@
 				return 0;
 			}
 
+			// Function to add text
+			function message ( msg ) {
+				// Transforms links
+				
+				// Add data
+				document.getElementById('muckcont').textContent += msg;
+				// Log data
+				if ( localStorage.logit == 'true' ) {
+					localStorage.furrylog += msg;
+				}
+				return 0;
+			}
 
 			// Websocket connection to server
 			const socket = new WebSocket( websockethost );
 			socket.onmessage = function ( msg ) {
-				// Transforms links
-				
-				// Add data
-				document.getElementById('muckcont').textContent += msg.data;
-				// Log data
-				if ( localStorage.logit == 'true' ) {
-					localStorage.furrylog += msg.data;
-				}
-
-				return 0;
+				return message ( msg.data );
 			}
 			socket.onerror = function ( ) {
-				document.getElementById('muckcont').textContent += 'Connection error.\r\n';
-				return 0;
+				return message ( 'Connection error.\r\n' );
 			}
 			socket.onclose = function ( ) {
-				document.getElementById('muckcont').textContent += 'Connection to server terminated. Refresh page to connect again.\r\n';
-				return 0;
+				return message ( 'Connection to server terminated. Refresh page to connect again.\r\n' );
 			}
 			socket.onconnect = function ( ) {
-				document.getElementById('muckcont').textContent += 'Connection to established.\r\n';
-				return 0;
+				return message ( 'Connection established.\r\n' );
 			}
 			function send ( ele ) {
 				// Get value
@@ -234,7 +235,11 @@
 Trying to connect to server ...
 </pre>
 				<form class="w-100" action="javascript:void(0);" onsubmit="javascript:send(document.getElementById('userentr'));">
+<<<<<<< Updated upstream
 					<input id="userentr" type="entry" name="entry" class="w-100" value="connect <name> <password>" autocomplete="off" aria-label="enter FurryMUCK command" style="" />
+=======
+					<input id="userentr" type="entry" name="entry" class="w-100" value="connect " autocomplete="off" aria-label="enter FurryMUCK command" style="background-color: transparent; border: none; color: inherit;" />
+>>>>>>> Stashed changes
 				</form>
 				<div id="disclaimer" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
 					<strong>I cannot guarantee availability, confidentiality, and integrity of my infrastructure and software. Therefore, you assume all risks and I disclaim all consequences unless required by law. If you cannot accept, do not use my services or software.</strong>
