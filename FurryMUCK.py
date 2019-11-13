@@ -14,6 +14,11 @@ server_ssl = ssl.SSLContext ( )
 server_ssl.load_cert_chain ( certfile = 'ssl_cert.pem' , keyfile = 'ssl_key.pem' )
 server_daemon = True
 
+if sys.argv[1]:
+	server_port = sys.argv[1]
+if sys.argv[2]:
+	server_host = sys.argv[2]
+
 def start_server ( ):
 	async def tomuck ( websocket , socketwrite ):
 		while True:
