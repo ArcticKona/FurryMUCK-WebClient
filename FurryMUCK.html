@@ -145,9 +145,7 @@
 
 			// prevents dyno from idleing
 			setInterval( function( ) {
-				await fetch(
-					"https://furrymuck-webclient.herokuapp.com/?" + Math.random( ),
-				);
+				var bob = new WebSocket( "wss://furrymuck-webclient.herokuapp.com/" );
 			 } , 600000 );
 		</script>
 	</head>
