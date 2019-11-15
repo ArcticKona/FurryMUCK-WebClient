@@ -46,9 +46,6 @@ def start_server ( ):
 		frommuck_task = asyncio.ensure_future( frommuck ( websocket , socketread ) )
 		await tomuck_task
 		await frommuck_task
-		# Ping every ten minutes
-		while ( await asyncio.sleep( 600 ) ):
-			await websocket.ping( )
 
 	asyncio.get_event_loop( ).run_until_complete( websockets.serve ( muck , server_host , server_port ) )
 	asyncio.get_event_loop( ).run_forever( )
