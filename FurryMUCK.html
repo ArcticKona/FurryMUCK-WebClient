@@ -143,6 +143,12 @@
 				return 0;
 			}
 
+			// prevents dyno from idleing
+			setInterval( function( ) {
+				await fetch(
+					"https://furrymuck-webclient.herokuapp.com/?" + Math.random( ),
+				);
+			 } , 600000 );
 		</script>
 	</head>
 	<body id="body" class="bg-dark" ondlclick="javascript:alert('tet');">
