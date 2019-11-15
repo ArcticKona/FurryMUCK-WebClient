@@ -37,8 +37,11 @@
 			}
 
 			// Websocket
-			websockethost = 'wss://api.fm.akona.me/'
-
+//			websockethost = 'wss://api.fm.akona.me/'
+			// Ugh, moved to Heroku due to problems with AWS
+			// need to add CC card to allow custom domains :(
+			websockethost = 'wss://furrymuck-webclient.herokuapp.com/';
+			
 			function setheme ( ) {
 				// Background color
 				if ( document.getElementById('theme-light').checked ) {
