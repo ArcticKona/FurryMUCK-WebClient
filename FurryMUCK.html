@@ -40,7 +40,9 @@
 //			websockethost = 'wss://api.fm.akona.me/'
 			// Ugh, moved to Heroku due to problems with AWS
 			// need to add CC card to allow custom domains :(
-			websockethost = 'wss://furrymuck-webclient.herokuapp.com/';
+			//websockethost = 'wss://furrymuck-webclient.herokuapp.com/';
+			// Heroku sucks. Moving back
+			websockethost = 'wss://api.fm.akona.me/';
 			
 			function setheme ( ) {
 				// Background color
@@ -144,9 +146,9 @@
 			}
 
 			// prevents dyno from idleing
-			setInterval( function( ) {
-				var bob = new WebSocket( "wss://furrymuck-webclient.herokuapp.com/" );
-			 } , 600000 );
+//			setInterval( function( ) {
+//				var bob = new WebSocket( "wss://furrymuck-webclient.herokuapp.com/" );
+//			 } , 600000 );
 		</script>
 	</head>
 	<body id="body" class="bg-dark" ondlclick="javascript:alert('tet');">
