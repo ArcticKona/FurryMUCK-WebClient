@@ -1,7 +1,7 @@
 # FurryMUCK-WebClient
 Basic web client for FurryMUCK (or any MUCK)
 
-[Live service](https://furrymuck.kona.cf/)
+[Live service](https://fm.akona.me)
 
 DM me for issues or help.
 
@@ -16,3 +16,6 @@ FurryMUCK.pem:
 
 `pip3 install websockets python-daemon`
 
+## TODO
+UI sucks.
+Persistent TCP connections.
